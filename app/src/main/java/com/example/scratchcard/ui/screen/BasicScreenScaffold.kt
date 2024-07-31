@@ -9,17 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.scratchcard.R.drawable
+import com.example.scratchcard.ui.VerticalSpace
+import com.example.scratchcard.ui.text.LoadingText
 import com.example.scratchcard.ui.theme.ScratchCardTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasicScreenScaffold(
     screenTitle: String,
-    isLoading: Boolean,
+    loading: String? = null,
     backAction: (() -> Unit)? = null,
-    content: @Composable () -> Unit
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
     ScratchCardTheme {
         Scaffold(
@@ -39,28 +40,24 @@ fun BasicScreenScaffold(
                                     tint = MaterialTheme.colorScheme.primary,
                                 )
                             }
-                        } ?:
-
-                            Icon(
-                                painter = painterResource(
-                                    id = drawable.baseline_app_shortcut_24
-                                ),
-                                contentDescription = "",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
+                        } ?: Icon(
+                            painter = painterResource(id = drawable.baseline_app_shortcut_24),
+                            contentDescription = "",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
 
                     }
                 )
             })
         {
-            Box(Modifier.padding(it)) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(modifier = Modifier.padding(it)) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
                     content()
                 }
 
             }
-            if (isLoading) {
+            if (loading != null) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -68,19 +65,13 @@ fun BasicScreenScaffold(
                         .padding(16.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         CircularProgressIndicator(
                             color = Color.White,
                             modifier = Modifier.size(48.dp)
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "loadingText",
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
+                        VerticalSpace()
+                        LoadingText(text = loading)
                     }
                 }
             }

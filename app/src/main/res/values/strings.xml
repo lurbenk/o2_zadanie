@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ScratchCard</string>
+    <string name="screen_title_main">Scratch Card Application</string>
+    <string name="button_scratch_card">Scratch card</string>
+    <string name="button_activate_card">Activate card</string>
+    <string name="code_activation_error">Code Activation Error</string>
+    <string name="loading_activating">Your code is activating</string>
+    <string name="loading_scratching">Scratching ...</string>
+    <string name="button_close">Close</string>
 </resources>

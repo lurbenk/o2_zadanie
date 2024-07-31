@@ -2,7 +2,7 @@ package com.example.scratchcard.ui.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,8 +16,8 @@ import com.example.scratchcard.ui.text.LargeText
 
 @Composable
 fun ScratchCard(state: ScratchCardState) {
-    Card() {
-        Box() {
+    Card {
+        Box {
             Image(
                 painter = painterResource(id = if (state.scratched) drawable.img_scratched else drawable.img_unscratched),
                 contentDescription = "",
@@ -26,18 +26,25 @@ fun ScratchCard(state: ScratchCardState) {
             Box(
                 Modifier
                     .align(Alignment.CenterEnd)
-                    .padding(end = 45.dp)) {
-                LargeText(text = if(state.activated) "Activated" else state.code.orEmpty())
+                    .padding(end = 45.dp)
+            ) {
+                LargeText(text = toTitle(state))
             }
         }
     }
+}
+
+private fun toTitle(state: ScratchCardState): String = when {
+    state.activated -> "Activated"
+    state.scratched -> state.code
+    else -> ""
 }
 
 @Preview
 @Composable
 private fun ScratchCardPreview() {
     Column() {
-        ScratchCard(state = ScratchCardState(scratched = false, code = null, activated = false))
+        ScratchCard(state = ScratchCardState(scratched = false, code = "", activated = false))
         ScratchCard(state = ScratchCardState(scratched = true, code = "12345678", activated = false))
         ScratchCard(state = ScratchCardState(scratched = true, code = "12345678", activated = true))
     }

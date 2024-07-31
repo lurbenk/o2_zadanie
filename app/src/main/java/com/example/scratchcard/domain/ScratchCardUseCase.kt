@@ -1,7 +1,9 @@
 package com.example.scratchcard.domain
 
-import android.view.ViewOverlay
-import com.example.scratchcard.data.*
+import com.example.scratchcard.base.*
+import com.example.scratchcard.data.ApiResult
+import com.example.scratchcard.model.ScratchCardModel
+import com.example.scratchcard.model.VersionModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -11,13 +13,6 @@ sealed class ScratchCardUseCase {
         private val repository: ScratchCardRepository
     ) : UnitFlowUseCase<ScratchCardModel>() {
         override fun invoke(): Flow<ScratchCardModel> = repository.observeCardState()
-    }
-
-    class GetCurrentCardState @Inject constructor(
-        private val repository: ScratchCardRepository
-    ) : UnitUseCase<ScratchCardModel>() {
-        override fun invoke(): ScratchCardModel =
-            repository.getCurrentCardState()
     }
 
     class SetScratched @Inject constructor(
@@ -35,13 +30,29 @@ sealed class ScratchCardUseCase {
         override fun invoke() {
             repository.activateCard()
         }
-
     }
 
-    class GetVersionCall @Inject constructor(
-        private val versionRepository: VersionRepository
-    ) : SuspendFlowUseCase<String, Resource<VersionModel?>>() {
-        override suspend fun invoke(input: String): Flow<Resource<VersionModel?>> =
-            versionRepository.getVersion(input)
+    class IsCodeValid : UseCase<String, Boolean>() {
+        override fun invoke(input: String): Boolean = try {
+            val inputNumber = input.toLongOrNull()
+            if (inputNumber != null) inputNumber > 277028
+            else false
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    class RequestVersion @Inject constructor(
+        private val repository: VersionRepository
+    ) : SuspendFlowUseCase<String, Unit>() {
+        override suspend fun invoke(input: String) {
+            repository.requestVersion(input)
+        }
+    }
+
+    class ObserveVersion @Inject constructor(
+        private val repository: VersionRepository
+    ) : SuspendUnitFlowUseCase<ApiResult<VersionModel>>() {
+        override suspend fun invoke() = repository.observeVersion()
     }
 }

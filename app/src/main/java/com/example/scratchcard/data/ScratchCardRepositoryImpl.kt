@@ -1,7 +1,7 @@
 package com.example.scratchcard.data
 
-import com.example.scratchcard.domain.ScratchCardModel
 import com.example.scratchcard.domain.ScratchCardRepository
+import com.example.scratchcard.model.ScratchCardModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
@@ -13,7 +13,7 @@ class ScratchCardRepositoryImpl @Inject constructor() : ScratchCardRepository {
 
     override fun observeCardState(): Flow<ScratchCardModel> = cardFlow
 
-    override fun getCurrentCardState(): ScratchCardModel = cardFlow.value
+    override fun loadCardState(): ScratchCardModel = cardFlow.value
 
     override fun scratchCard() {
         cardFlow.value = ScratchCardModel.Scratched(generateUUID())

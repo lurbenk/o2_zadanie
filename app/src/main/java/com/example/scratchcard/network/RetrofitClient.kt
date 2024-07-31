@@ -1,4 +1,4 @@
-package com.example.scratchcard.data
+package com.example.scratchcard.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,5 +23,5 @@ object RetrofitClient {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val apiService: ApiService = retrofit.create(ApiService::class.java)
+    val versionApi: VersionApi = retrofit.create(VersionApi::class.java)
 }
